@@ -90,7 +90,7 @@ class Socket extends Heart {
      * @param callback 回调函数
      */
     onopen(callback?: CallableFunction) {
-        
+
         this.ws.onopen = (event) => {
             clearTimeout(this.reConnecTimer);//清除重连定时器
             // this.options.reconnectCount = this.reConnecCount;//计数器重置
@@ -112,7 +112,7 @@ class Socket extends Heart {
      * @param callback  回调函数
      */
     onclose(callback?: CallableFunction) {
-        
+
         this.ws.onclose = (event) => {
             super.reset();
             !this.options.isRestory && this.onreconnect()
@@ -129,7 +129,7 @@ class Socket extends Heart {
      * @param callback 回调函数
      */
     onerror(callback?: CallableFunction) {
-        
+
         this.ws.onerror = (event) => {
             if (typeof callback === "function") {
                 callback(event)
@@ -144,7 +144,7 @@ class Socket extends Heart {
      * @param callback 回调函数
      */
     onmessage(callback?: CallableFunction) {
-        
+
         this.ws.onmessage = (event) => {
             //收到任何消息,重新开始倒计时心跳检测
             super.reset().start(() => {
@@ -162,7 +162,7 @@ class Socket extends Heart {
      * @param data 发送的信息 
      */
     send(data: string) {
-        
+
         if (this.ws.readyState !== this.ws.OPEN) {
             new Error("没有连接到服务器,无法推送信息");
             return;
@@ -173,7 +173,7 @@ class Socket extends Heart {
      * 连接事件
      */
     onreconnect() {
-        
+
         if (this.options.reconnectCount as number > 0 || this.options.reconnectCount === -1) {
             this.options.reconnectTime = setTimeout(() => {
                 this.create();
@@ -195,7 +195,7 @@ class Socket extends Heart {
         this.options.isRestory = true;
         this.ws.close();
     }
-    
+
 }
 
 //-------------示例

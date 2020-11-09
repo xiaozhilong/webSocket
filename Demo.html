@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+        *  节流
+        */
+        var throttle = function (fn, delay) {
+            // 定义上次触发时间
+            let last = 0;
+            var timer = null;
+            return (...args) => {
+                debugger
+                const now = Date.now();
+                console.log("call", now, last, delay);
+                if (now > last + delay) {
+                    last = now;
+                    fn.apply(this, args);
+                }
+            }
+        }
+
+        /**
+         * 防抖
+        */
+        var debounce = function (fn, delay) {
+            let timer;
+            return (...args) => {
+                debugger
+                //判断定时器是否存在，清除定时器
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                //重新调用setTimeout
+                timer = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            }
+        }
+        /**
+         * 加强版节流防抖
+        */
+        function throttle_strong(fn, interval) {
+            let last = 0, timer = null;
+            return function (...args) {
+                let now = +new Date();
+                if (now - last < interval) {
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        last = now;
+                        fn.apply(this, args);
+                    }, interval);
+                } else {
+                    // 这个时候表示时间到了，必须给响应
+                    last = now;
+                    fn.apply(this, args);
+                }
+            }
+        }
+        /**
+         * 要执行的方法
+         * @param String name 传递的参数
+         */
+        function postFun(name) {
+            debugger
+            document.writeln("名字：" + name);
+        }
+
+        //================测试部分 => 【1s重复点击10次】
+        var t = throttle(postFun, 10000);
+        var ejector = setInterval(() => {
+            t("tiger");
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(ejector);
+        }, 10 * 1000);
+    </script>
+</body>
+
+</html>
